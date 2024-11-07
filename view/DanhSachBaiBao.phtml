@@ -1,0 +1,153 @@
+<style>
+    /* Thêm một số CSS cơ bản */
+    /* body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        } */
+    h1 {
+        text-align: center;
+        color: #333;
+    }
+
+    .topic-section {
+        margin-bottom: 40px;
+    }
+
+    .topic-header {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px;
+        font-size: 1.5em;
+        border-radius: 5px;
+    }
+
+    .carousel-item {
+        padding: 20px;
+    }
+
+    .card {
+        margin: 10px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .card-body {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+    }
+
+    .carousel-inner {
+        display: flex;
+        flex-wrap: nowrap;
+    }
+
+    .carousel-item .row {
+        display: flex;
+    }
+
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 5%;
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        filter: invert(100%);
+    }
+
+    /* Điều chỉnh vị trí các nút điều hướng */
+    .carousel-control-prev,
+    .carousel-control-next {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: auto;
+    }
+
+    .carousel-control-prev {
+        left: -20px;
+        /* Đẩy nút điều hướng trái ra ngoài card */
+    }
+
+    .carousel-control-next {
+        right: -20px;
+        /* Đẩy nút điều hướng phải ra ngoài card */
+    }
+</style>
+<?php
+
+
+?>
+
+<div class="papers-list">
+    <?php
+    if (empty($data)) {
+        echo '<div class="alert alert-warning mt-4">Không có bài báo nào để hiển thị.</div>';
+    } else {
+
+        // Khởi tạo mảng để nhóm bài báo theo chủ đề
+        $papersByTopic = array();
+        foreach ($data as $paper) {
+            $papersByTopic[$paper->topic_name][] = $paper;
+        }
+    ?>
+        <h1>Danh Sách Bài Báo Mới Nhất Trong Năm Theo Chủ Đề</h1>
+        <?php foreach ($papersByTopic as $topic => $papers) : ?>
+            <div class="topic-section mt-5">
+                <h2 class="topic-header"><?php echo htmlspecialchars($topic); ?></h2>
+
+                <div id="carousel-<?php echo md5($topic); ?>" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <?php $chunks = array_chunk($papers, 3); ?>
+                        <?php foreach ($chunks as $index => $chunk) : ?>
+                            <div class="carousel-item <?php echo $index === 0 ? 'active' : ''; ?>">
+                                <div class="row">
+                                    <?php foreach ($chunk as $paper) : ?>
+                                        <div class="col-md-4">
+                                            <div class="card mb-3">
+                                                <div class="card-body">
+                                                    <h5 class="card-title fw-bold">
+                                                        <a href="index.php?action=paperDetail&id=<?php echo $paper->paper_id; ?>">
+                                                            <?php echo htmlspecialchars($paper->title); ?>
+                                                        </a>
+                                                    </h5>
+                                                    <p class="card-text">
+                                                        <?php echo nl2br(htmlspecialchars($paper->abstract)); ?>
+                                                    </p>
+                                                    <p class="card-text">
+                                                        <small class="text-muted fw-light fst-italic">
+                                                            <?php echo htmlspecialchars($paper->start_date); ?><br>
+                                                        </small>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+
+                    <a class="carousel-control-prev" href="#carousel-<?php echo md5($topic); ?>" role="button" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    </a>
+                    <a class="carousel-control-next" href="#carousel-<?php echo md5($topic); ?>" role="button" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    </a>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    <?php } // Đóng phần kiểm tra nếu có dữ liệu 
+    ?>
+</div>

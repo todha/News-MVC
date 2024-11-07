@@ -1,0 +1,64 @@
+<?php $profile = json_decode($author['profile_json_text'], true); ?>
+
+<h1 class="mt-4"><?php echo htmlspecialchars($author['full_name']); ?>'s Profile</h1>
+
+<div class="profile-info">
+<div class="d-flex flex-column align-items-center m-3">
+        <!-- Hình ảnh đại diện -->
+        <img src="<?php echo htmlspecialchars($author['image_path']); ?>" 
+             alt="Profile Picture" 
+             class="rounded-circle mb-3" 
+             style="width: 150px; height: 150px; object-fit: cover;">
+    </div>
+
+    <p><strong>Tiểu sử: </strong> <?php echo htmlspecialchars($profile['bio']); ?></p>
+
+    <?php if (isset($profile['interests']) && is_array($profile['interests'])) : ?>
+        <h5> <strong>Hướng nghiên cứu quan tâm: </strong></h5>
+        <ul class="list-unstyled">
+            <?php foreach ($profile['interests'] as $interest) : ?>
+                <li><?php echo htmlspecialchars($interest); ?></li>
+            <?php endforeach; ?>
+        </ul>
+    <?php endif; ?>
+   
+    <?php if (isset($profile['education'])) : ?>
+        <h5> <strong>Học vấn: </strong></h5>
+        <ul class="list-unstyled">          
+                <li><?php echo htmlspecialchars($profile['education']); ?></li>
+        </ul>
+    <?php endif; ?>
+
+    <?php if (isset($profile['work_experiences']) && is_array($profile['work_experiences'])) : ?>
+        <h5> <strong>Kinh nghiệm:</strong></h5>
+        <ul class="list-unstyled">
+            <?php foreach ($profile['work_experiences'] as $work_experiences) : ?>
+                <li><?php echo htmlspecialchars($work_experiences); ?></li>
+            <?php endforeach; ?>
+        </ul>
+    <?php endif; ?>
+    <p><a href="index.php?action=updateProfile" class="btn btn-primary">Update Profile</a></p>
+</div>
+
+<div class="papers-list">
+    <h2 class="mt-4">Papers Authored by <?php echo htmlspecialchars($author['full_name']); ?></h2>
+
+    <?php if (!empty($papers)) : ?>
+        <ul class="list-group">
+            <?php foreach ($papers as $paper) : ?>
+                <a href="index.php?action=paperDetail&id=<?php echo $paper['paper_id']; ?>">
+                <li class="list-group-item">
+                    <h5 class="mb-1"><?php echo htmlspecialchars($paper['title']); ?></h5>
+                    <p class="mb-1"><strong>Authors:</strong> <?php echo htmlspecialchars($paper['author_string_list']); ?></p>
+                    <p class="mb-1"><strong>Abstract:</strong> <?php echo htmlspecialchars($paper['abstract']); ?></p>
+                    <p class="mb-1"><strong>Conference ID:</strong> <?php echo htmlspecialchars($paper['conference_id']); ?></p>
+                    <p class="mb-1"><strong>Topic:</strong> <?php echo htmlspecialchars($paper['topic_name']); ?></p>
+                    <small><strong>Start Date:</strong> <?php echo htmlspecialchars($paper['start_date']); ?> - <strong>End Date:</strong> <?php echo htmlspecialchars($paper['end_date']); ?></small>
+                </li>
+                </a>
+            <?php endforeach; ?>
+        </ul>
+    <?php else : ?>
+        <p>No papers found.</p>
+    <?php endif; ?>
+</div>

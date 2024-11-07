@@ -1,0 +1,87 @@
+<style>
+.papers-list {
+            margin-top: 20px;
+        }
+        .papers-list h2 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #007bff;
+        }
+        .list-group-item {
+            background-color: #fff;
+            border: 1px solid rgba(0, 0, 0, 0.125);
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .list-group-item:hover {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .list-group-item .card-title {
+            font-size: 1.2rem;
+            color: #007bff;
+        }
+        .list-group-item .card-text {
+            font-size: 0.9rem;
+            color: #555;
+        }
+        .list-group-item .card-subtitle {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 5px;
+        }
+        .list-group-item small {
+            font-size: 0.8rem;
+            color: #888;
+        }
+    </style>
+
+
+
+<h1 class="text-center mb-4">Danh Sách Bài Báo Của Bạn</h1>
+
+<!-- Danh sách bài báo tác giả viết -->
+<div class="papers-list">
+    <h2>Bài báo tôi viết</h2>
+    <?php if (!empty($papers)) : ?>
+        <ul class="list-group">
+            <?php foreach ($papers as $paper) : ?>
+                <a href="index.php?action=paperDetail&id=<?php echo $paper['paper_id']; ?>">
+                <li class="list-group-item">
+                    <h5 class="mb-1"><?php echo htmlspecialchars($paper['title']); ?></h5>
+                    <p class="mb-1"><strong>Authors:</strong> <?php echo htmlspecialchars($paper['author_string_list']); ?></p>
+                    <p class="mb-1"><strong>Abstract:</strong> <?php echo htmlspecialchars($paper['abstract']); ?></p>
+                    <p class="mb-1"><strong>Conference ID:</strong> <?php echo htmlspecialchars($paper['conference_id']); ?></p>
+                    <p class="mb-1"><strong>Topic:</strong> <?php echo htmlspecialchars($paper['topic_name']); ?></p>
+                    <small><strong>Start Date:</strong> <?php echo htmlspecialchars($paper['start_date']); ?> - <strong>End Date:</strong> <?php echo htmlspecialchars($paper['end_date']); ?></small>
+                    </li>   
+                </a>
+            <?php endforeach; ?>
+        </ul>   
+    <?php else : ?>
+        <p class="text-muted">No papers found.</p>
+    <?php endif; ?>
+
+    <div> <p><a href="index.php?action=addPaperForm" class="btn btn-primary">+ Thêm bài báo</a></p></div>
+</div>
+
+<!-- Danh sách bài báo tác giả tham gia -->
+<div class="papers-list mt-4">
+    <h2>Bài báo tôi tham gia</h2>
+    <?php if (!empty($papers_member)) : ?>
+        <ul class="list-group">     
+            <?php foreach ($papers_member as $paper_mem) : ?>
+                <a href="index.php?action=paperDetail&id=<?php echo $paper_mem['paper_id']; ?>">                                            
+                <li class="list-group-item">
+                    <h5 class="mb-1"><?php echo htmlspecialchars($paper_mem['title']); ?></h5>
+                    <p class="mb-1"><strong>Abstract:</strong> <?php echo htmlspecialchars($paper_mem['abstract']); ?></p>
+                    <p class="mb-1"><strong>Conference ID:</strong> <?php echo htmlspecialchars($paper_mem['conference_id']); ?></p>
+                    <p class="mb-1"><strong>Topic:</strong> <?php echo htmlspecialchars($paper_mem['topic_name']); ?></p>
+                </li>
+                </a>
+            <?php endforeach; ?>
+        </ul>
+    <?php else : ?>
+        <p class="text-muted">No papers found.</p>
+    <?php endif; ?>
+</div>
+

@@ -1,0 +1,34 @@
+<h1 class="mt-4">Chi tiết bài báo</h1>
+
+<?php if ($paper): ?>
+    <div class="paper-details">
+        <h2><?php echo htmlspecialchars($paper['title']); ?></h2>
+        <p><strong>Authors:</strong></p>
+        <ul>
+            <?php
+            $authors = explode(',', $paper['author_string_list']);
+            foreach ($authors as $author): ?>
+                <li>
+                    <?php echo htmlspecialchars(trim($author)); ?>
+                    <!-- Kiểm tra vai trò admin để hiển thị nút xóa -->
+                    <?php if ($_SESSION['UserRole'] === 'admin'): ?>
+                        <a href="index.php?action=removeAuthor&paper_id=<?php echo $paper['paper_id']; ?>&author=<?php echo urlencode(trim($author)); ?>" class="btn btn-danger btn-sm">
+                            Xóa
+                        </a>
+                    <?php endif; ?>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+        <p><strong>Abstract:</strong> <?php echo nl2br(htmlspecialchars($paper['abstract'])); ?></p>
+        <p><strong>Conference Name:</strong> <?php echo htmlspecialchars($paper['name']); ?></p>
+        <p><strong>Topic Name:</strong> <?php echo htmlspecialchars($paper['topic_name']); ?></p>
+        <p><strong>Ngày bắt đầu:</strong> <?php echo htmlspecialchars($paper['start_date']) ?></p>
+        <p><strong>Ngày kết thúc:</strong> <?php echo htmlspecialchars($paper['end_date']); ?></p>
+    </div>
+<?php else: ?>
+    <p>Bài báo không tồn tại.</p>
+<?php endif; ?>
+
+
+
+<p><a href="javascript:history.back()" class="btn btn-primary">Quay lại</a></p>

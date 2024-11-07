@@ -1,0 +1,136 @@
+<div class="d-flex justify-content-center align-items-center">
+    <form class="shadow container-md" action="index.php?action=updateProfile" method="post" enctype="multipart/form-data">
+
+        <h4 class="display-4  fs-1">Edit Profile</h4><br>
+
+        <!-- Xử lý thông báo lỗi nếu có -->
+        <?php if (isset($_GET['error'])) : ?>
+            <div class="alert alert-danger" role="alert">
+                <?php echo htmlspecialchars($_GET['error']); ?>
+            </div>
+        <?php endif; ?>
+
+        <!-- Xử lý thông báo thành công nếu có -->
+        <?php if (isset($_GET['success'])) : ?>
+            <div class="alert alert-success" role="alert">
+                <?php echo htmlspecialchars($_GET['success']); ?>
+            </div>
+        <?php endif; ?>
+
+        <div class="mb-3">
+            <label class="form-label">Full Name</label>
+            <input type="text" class="form-control" name="full_name" required value="<?php echo htmlspecialchars($author['full_name']); ?>">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Website</label>
+            <input type="text" class="form-control" name="website" required value="<?php echo htmlspecialchars($author['website']); ?>">
+        </div>
+
+        <!-- Hiển thị Bio nếu có -->
+        <?php
+        $profile = json_decode($author['profile_json_text'], true); // Chuyển JSON thành mảng
+        ?>
+        <div class="mb-3">
+            <label class="form-label">Bio</label>
+            <textarea class="form-control" name="bio"><?php
+                                                        if (isset($profile['bio'])) :  echo htmlspecialchars($profile['bio']);
+                                                        endif; ?></textarea>
+        </div>
+
+
+        <!-- Hiển thị Interests nếu có -->
+        <div class="mb-3">
+            <label class="form-label">Interests</label>
+            <div id="interestsContainer">
+                <?php if (isset($profile['interests']) && is_array($profile['interests'])) : ?>
+                    <?php foreach ($profile['interests'] as $index => $interest) : ?>
+                        <div class="input-group mb-2">
+                            <input type="text" class="form-control" name="interests[]" value="<?php echo htmlspecialchars($interest); ?>">
+                            <button type="button" class="btn btn-danger" onclick="removeInterest(this)">Remove</button>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else : ?>
+                    <div class="input-group mb-2">
+                        <input type="text" class="form-control" name="interests[]" placeholder="Enter interest">
+                        <button type="button" class="btn btn-danger" onclick="removeInterest(this)">Remove</button>
+                    </div>
+                <?php endif; ?>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="addInterest()">Add Interest</button>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Education</label>
+            <textarea class="form-control" name="education"><?php
+                                                            if (isset($profile['education'])) :  echo htmlspecialchars($profile['education']);
+                                                            endif; ?></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">work_experiences</label>
+            <div id="work_experiencesContainer">
+                <?php if (isset($profile['work_experiences']) && is_array($profile['work_experiences'])) : ?>
+                    <?php foreach ($profile['work_experiences'] as $index => $work_experiences) : ?>
+                        <div class="input-group mb-2">
+                            <input type="text" class="form-control" name="work_experiences[]" value="<?php echo htmlspecialchars($work_experiences); ?>">
+                            <button type="button" class="btn btn-danger" onclick="removeWork_experience(this)">Remove</button>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else : ?>
+                    <div class="input-group mb-2">
+                        <input type="text" class="form-control" name="work_experiences[]" placeholder="Enter work_experiences">
+                        <button type="button" class="btn btn-danger" onclick="removeWork_experiences(this)">Remove</button>
+                    </div>
+                <?php endif; ?>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="addWork_experiences()">Add work_experiences</button>
+        </div>
+
+
+        <div class="mb-3">
+            <label class="form-label">Profile Picture</label>
+            <input type="file" class="form-control" name="image_path">
+            <img src="<?php echo htmlspecialchars($author['image_path']); ?>" class="rounded-circle" style="width: 70px">
+            <input type="hidden" name="old_pp" value="<?php echo htmlspecialchars($author['image_path']); ?>">
+        </div>
+
+        <div class="text-center m-4">
+            <button type="submit" class="btn btn-primary">Update</button>
+
+            <a href="index.php?action=profile" class="btn btn-primary mx-4">Quay lại</a>
+        </div>
+    </form>
+</div>
+
+<script>
+    function addInterest() {
+        var container = document.getElementById('interestsContainer');
+        var inputGroup = document.createElement('div');
+        inputGroup.className = 'input-group mb-2';
+        inputGroup.innerHTML = `
+        <input type="text" class="form-control" name="interests[]" placeholder="Enter interest">
+        <button type="button" class="btn btn-danger" onclick="removeInterest(this)">Remove</button>
+    `;
+        container.appendChild(inputGroup);
+    }
+
+    function removeInterest(button) {
+        button.parentNode.remove();
+    }
+
+    function addWork_experiences() {
+        var container = document.getElementById('work_experiencesContainer');
+        var inputGroup = document.createElement('div');
+        inputGroup.className = 'input-group mb-2';
+        inputGroup.innerHTML = `
+        <input type="text" class="form-control" name="work_experiences[]" placeholder="Enter work_experiences">
+        <button type="button" class="btn btn-danger" onclick="removeWork_experiences(this)">Remove</button>
+    `;
+        container.appendChild(inputGroup);
+    }
+
+    function removeWork_experiences(button) {
+        button.parentNode.remove();
+    }
+</script>

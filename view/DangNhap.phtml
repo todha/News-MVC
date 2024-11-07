@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <?php require("include/meta.phtml"); ?>
+</head>
+<style>
+
+</style>
+
+<body>
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col col-lg-6 bg-light p-4 rounded">
+                <h2 class="text-center mb-4">Đăng nhập</h2>
+                <form action="index.php?action=login" method="post">
+                    <div class="form-group mb-3">
+                        <label for="username" class="form-label">Tên đăng nhập:</label>
+                        <input type="text" class="form-control" name="UserName" placeholder="Tên đăng nhập" required>
+                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="password" class="form-label">Mật khẩu:</label>
+                        <input type="password" class="form-control" name="Password" id="password" placeholder="Mật khẩu" required>
+                    </div>
+                    <div class="form-group form-check mb-3">
+                        <input type="checkbox" class="form-check-input" id="showPassword">
+                        <label class="form-check-label custom-form-label" for="showPassword">Hiện mật khẩu</label>
+                    </div>
+                    <div class="text-center"> <!-- Căn giữa nút đăng nhập -->
+                        <button type="submit" class="btn btn-primary my-3">Đăng nhập</button>
+                    </div>
+                    <div class="text-center">
+                        <p>Bạn chưa có tài khoản? Hãy nhấn<br> vào <a href="index.php?action=signup" class="link user-actions"><strong>Đăng ký</strong></a>?</p>
+                    </div>
+                </form>
+                <?php
+                echo $data;
+                ?>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const showPasswordCheckbox = document.getElementById('showPassword');
+            const passwordInput = document.getElementById('password');
+
+            showPasswordCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    passwordInput.type = 'text'; // Hiện mật khẩu
+                } else {
+                    passwordInput.type = 'password'; // Ẩn mật khẩu
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

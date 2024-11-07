@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <?php require("include/meta.phtml"); ?>
+</head>
+<style>
+    /* Thêm một số CSS cơ bản */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 20px;
+    }
+
+    .container {
+        /* max-width: 1200px;        */
+        margin: auto;
+        background-color: #fff;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    a {
+        text-decoration: none;
+        /* Loại bỏ gạch chân */
+        color: inherit;
+        /* Sử dụng màu của phần tử cha */
+    }
+</style>
+
+<body>
+    <div class="container mt-5">
+
+        <div id="header">
+            <?php require("include/header.phtml"); ?>
+        </div>
+
+        <div class="row m-3">
+            <div class="col">
+                <div id="content">
+                    <!-- ------------------------------------ -->
+                    <!-- ------------------------------------ -->
+                    <!-- BEGIN: Nội dung chính của trang web  -->
+                    <div id="primary">
+                        <?php require($VIEW); ?>
+                    </div>
+
+                    <!-- Chèn kết quả tìm kiếm -->
+
+                    <div id="primary">
+                        <?php
+                        // Kiểm tra nếu $RESULT_VIEW đã được đặt và tệp tồn tại
+                        if (isset($RESULT_VIEW) && file_exists($RESULT_VIEW)) {
+                            include($RESULT_VIEW);
+                        } ?>
+
+
+                        <!-- END: Nội dung chính của trang web  -->
+                        <!-- ------------------------------------ -->
+                        <!-- ------------------------------------ -->
+                    </div>
+                </div>
+               
+            </div>
+            <?php require("include/footer.phtml"); ?>
+
+
+        </div>
+</body>
+
+</html>

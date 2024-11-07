@@ -1,0 +1,130 @@
+<h2>Add New Paper</h2>
+<form id="addPaperForm" action="index.php?action=addPaper" method="post">
+    <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" class="form-control" id="title" name="title" required>
+    </div>
+    <div class="form-group">
+        <label for="abstract">Abstract</label>
+        <textarea class="form-control" id="abstract" name="abstract" rows="4" required></textarea>
+    </div>
+    <div class="form-group">
+        <label for="conference_id">Conference</label>
+        <select class="form-control" id="conference_id" name="conference_id" required>
+            <?php foreach ($conferences as $conference) : ?>
+                <option value="<?php echo $conference->conference_id; ?>">
+                    <?php echo htmlspecialchars($conference->name); ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="topic_id">Topic</label>
+        <select class="form-control" id="topic_id" name="topic_id" required>
+            <?php foreach ($topics as $topic) : ?>
+                <option value="<?php echo $topic->topic_id; ?>">
+                    <?php echo htmlspecialchars($topic->topic_name); ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Authors</label>
+        <input type="hidden" id="author_string_list" name="author_string_list" value="">
+        <div id="authorsList">
+            <div class="d-flex align-items-center mb-2">
+                <select class="form-control mr-2" name="authors[]" required>
+                    <?php foreach ($authors as $author) : ?>
+                        <option value="<?php echo $author->user_id; ?>">
+                            <?php echo htmlspecialchars($author->full_name); ?> 
+                        </option>
+                    <?php endforeach; ?>        
+                </select>
+                <button type="button" class="btn btn-danger btn-remove-author">Remove</button>
+            </div>
+        </div>  
+        <button type="button" id="addAuthor" class="btn btn-primary mt-2">Add Another Author</button>
+    </div>
+
+    
+    <div class="text-center m-4">
+            <button type="submit" class="btn btn-success">Cập nhật</button>
+
+            <a href="index.php?action=profile" class="btn btn-success mx-4">Quay lại</a>
+        </div>
+</form>
+
+<script>    
+$(document).ready(function() {
+    $('#addPaperForm').submit(function(e) {
+    // Lấy giá trị từ các trường input
+    var title = $('#title').val().trim();
+    var abstract = $('#abstract').val().trim();
+    var conference_id = $('#conference_id').val();
+    var topic_id = $('#topic_id').val();
+    var author_string_list = $('#author_string_list').val().trim();
+
+    // Kiểm tra điều kiện hợp lệ
+    if (title === '' || abstract === '') {
+        // Nếu có trường nào không hợp lệ, ngăn chặn submit và hiển thị thông báo
+        alert('Vui lòng điền đầy đủ thông tin.');
+        e.preventDefault(); // Ngăn chặn form submit
+        return;
+    }
+
+    // Kiểm tra xem có các tên tác giả trùng nhau trong author_string_list không
+    var authorNames = author_string_list.split(',').map(function(item) {
+        return item.trim();
+    });
+
+    var duplicateFound = false;
+    authorNames.forEach(function(name, index) {
+        if (authorNames.indexOf(name) !== index) {
+            duplicateFound = true;
+        }
+    });
+
+    if (duplicateFound) {
+        alert('Tên tác giả trong danh sách không được trùng nhau.');
+        e.preventDefault(); // Ngăn chặn form submit
+        return;
+    }
+
+    // Nếu tất cả điều kiện hợp lệ, cho phép submit form
+});
+
+    // Thêm tác giả mới
+    $('#addAuthor').click(function() {
+        // Clone the last author select element
+        var newAuthorHtml = $('#authorsList .d-flex:last').clone();
+
+        // Clear the selected option (optional)
+        newAuthorHtml.find('option:selected').removeAttr('selected');
+
+        // Append the cloned element with new options
+        $('#authorsList').append(newAuthorHtml);
+
+        // Update author_string_list
+        updateAuthorStringList();
+    });
+
+    // Xóa tác giả
+    $(document).on('click', '.btn-remove-author', function() {
+        $(this).closest('.d-flex').remove();
+        updateAuthorStringList();
+    });
+
+    // Hàm cập nhật author_string_list
+    function updateAuthorStringList() {
+        var authorNames = [];
+        $('#authorsList select').each(function() {
+            var authorName = $(this).find('option:selected').text();
+            authorNames.push(authorName);
+        });
+        var authorString = authorNames.join(', ');
+        $('#author_string_list').val(authorString);
+    }
+});
+
+</script>

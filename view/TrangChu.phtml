@@ -1,0 +1,24 @@
+<h1>WELCOME TO HT PAPERS</h1>
+<hr />
+
+<hr />
+
+
+<?php if (isset($_SESSION["IsLogined"]) && $_SESSION["IsLogined"] == true) : ?>
+    <?php
+    $username = $_SESSION["UserName"];
+    $userRole = $_SESSION["UserRole"];
+    ?>
+    <div class="user-info mb-3">
+        <?php if ($userRole === "admin") : ?>
+            <p>Chào mừng Admin: <?php echo htmlspecialchars($username); ?></p>
+        <?php else : ?>
+            <p>Chào mừng bạn đã quay trở lại: <?php echo htmlspecialchars($username); ?></p>
+        <?php endif; ?>
+    </div>
+    <div>
+        <p><a href="index.php?action=myPapers" class="btn btn-primary">Ghé thăm các hoạt động của bạn</a></p>
+    </div>
+<?php else : ?>
+    <?php require("view/DanhSachBaiBao.phtml"); ?>
+<?php endif; ?>
